@@ -3,51 +3,60 @@
 
 #include <unordered_set>
 #include <unordered_map>
+#include <vector>
 
 template<typename T>
-struct VertEdge {
+struct Edge {
+    T u{};
     T v{};
-    unsigned int capacity{};
-public:
-    VertEdge(T v, unsigned int capacity) : v(v), capacity(capacity) {}
 
-    bool operator==(const VertEdge &rhs) const {
-        return v == rhs.v && capacity == rhs.capacity;
+    Edge(T u, T v) : u(u), v(v) {}
+
+    bool operator==(const Edge &rhs) const {
+        return u == rhs.u && v == rhs.v;
     }
 };
 
 template<typename T>
-struct vertEdgeHash {
-    inline std::size_t operator()(const VertEdge<T> &vertEdge) const {
-        return std::hash<T>{}(vertEdge.v);
+struct EdgeHash {
+    inline std::size_t operator()(const Edge<T> &edge) const {
+        return std::hash<T>{}(edge.u) / 2 + std::hash<T>{}(edge.v) / 2;
     }
 };
 
 template<typename T>
-using AdjLst = std::unordered_map<T, std::unordered_set<VertEdge<T>, vertEdgeHash<T>>>;
+using AdjLst = std::unordered_map<T, std::unordered_set<T>>;
+
+template<typename T>
+using EdgeMap = std::unordered_map<Edge<T>, unsigned int, EdgeHash<T>>;
 
 template<typename T>
 class Graph {
     int numEdges{0};
     int numVertices{0};
-    AdjLst<T> forwardAdjLst;
-    AdjLst<T> backwardAdjLst;
+    AdjLst<T> adjLst;
+    AdjLst<T> backAdjLst;
+    EdgeMap<T> edgeCapacities;
 public:
+
     Graph();
 
     [[nodiscard]] int getNumEdges() const;
 
     [[nodiscard]] int getNumVertices() const;
 
-    const AdjLst<T> &getForwardAdjLst() const;
-
-    const AdjLst<T> &getBackwardAdjLst() const;
+    const EdgeMap<T> &getEdgeCapacities() const;
 
     void addVertex(T v);
 
     void addEdge(T u, T v, unsigned int capacity);
 
-};
+    std::vector<Edge<T>> getPath(T source, T target, EdgeMap<T> &forwardFlow, EdgeMap<T> &backwardFlow);
 
+    void augment(EdgeMap<T> &flow, std::vector<Edge<T>> path, EdgeMap<T> &forwardFlow, EdgeMap<T> &backwardFlow);
+
+    EdgeMap<T> maxFlow(const T &source, const T &target);
+
+};
 
 #endif //GRAPH_H
