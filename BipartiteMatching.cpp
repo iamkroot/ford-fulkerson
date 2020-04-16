@@ -1,5 +1,9 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include "Graph.h"
+#include "Utils.h"
 
 template<typename T>
 bool checkFlow(const EdgeMap<T> &flow, const EdgeMap<T> &capacity) {
@@ -20,28 +24,24 @@ bool checkFlow(const EdgeMap<T> &flow, const EdgeMap<T> &capacity) {
     return true;
 }
 
-int main() {
+void maxBipartiteMatching(const std::string &path) {
+    std::ifstream input(path);
     Graph<int> graph;
-
-	// -------------------------START OF INPUT-------------------------
-	
 	int E{}, A{}, B{};
-	std::cout << "Enter number of edges, vertices in A, vertices in B:\n";
-	std::cin >> E >> A >> B;
+	input >> E >> A >> B;
 	int u{}, v{};
     int source = 0, target = A+B+1;
-	std::cout << "Enter " << E << " edges from A to B (1-indexed) :\n";
 	for (int i = 0; i < E; i++)
 	{
-		std::cin >> u >> v;
+		input >> u >> v;
 		graph.addEdge(source, u, 1);
 		graph.addEdge(u, A+v, 1);
 		graph.addEdge(A+v, target, 1);
 	}
 
-	// -------------------------END OF INPUT-------------------------
-	
+    Stopwatch<> stopwatch;	
     auto flow = graph.maxFlow(source, target);
+    auto fordFulkersonTime = stopwatch.stop();
     unsigned int flowVal = 0;
     std::cout << "(A -> B)" <<std::endl;
     for (const auto &item : flow) {
@@ -53,9 +53,27 @@ int main() {
     }
 
     if (checkFlow(flow, graph.getEdgeCapacities())) {
-        std::cout << "Matching: " << flowVal << std::endl;
+        std::cout << "Matchings: " << flowVal << std::endl << "Time: " << fordFulkersonTime << "μs." << std::endl;
     } else {
         std::cout << "Invalid flow" << std::endl;
+    }
+    return;
+}
+
+int main(int argc, char *argv[]){
+    std::stringstream help;
+    help << "Usage:" << std::endl
+         << "bipartite_matching DATASET_PATH [DATASET_PATH...]" << std::endl
+         << std::endl
+         << "The DATASET_PATH should be a path (no spaces) to a file containing edges of the bipartite graph in the form: src dest. The first line of the file should have: numberOfEdges numberOfVerticesInA numberOfVerticesInB"
+         << std::endl;
+
+    if (argc < 1) {
+        std::cout << help.str();
+        return 0;
+    }
+    for (int i = 1; i < argc; ++i) {
+        maxBipartiteMatching(argv[i]);
     }
     return 0;
 }
