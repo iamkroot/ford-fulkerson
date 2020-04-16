@@ -45,5 +45,18 @@ int main() {
     } else {
         std::cout << "Invalid flow" << std::endl;
     }
+
+    std::unordered_map<int, bool> visited;
+
+    visited = graph.minCut(source);
+    int edges = graph.getNumEdges();
+    EdgeMap<int> edgeCapaticies = graph.getEdgeCapacities();
+
+    std::cout<<"\nThe min-cut edges are as follows: \n";
+    for(auto item : edgeCapaticies){
+        if(visited[item.first.u] && !visited[item.first.v]){
+            std::cout<<item.first.u<<" - "<<item.first.v<<"\n";
+        }
+    }
     return 0;
 }

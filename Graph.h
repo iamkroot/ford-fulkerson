@@ -4,6 +4,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
+#include <algorithm>
 
 template<typename T>
 struct Edge {
@@ -37,6 +38,8 @@ class Graph {
     AdjLst<T> adjLst;
     AdjLst<T> backAdjLst;
     EdgeMap<T> edgeCapacities;
+    EdgeMap<T> flow;
+    EdgeMap<T> forwardFlow, backwardFlow;
 public:
 
     Graph();
@@ -51,11 +54,13 @@ public:
 
     void addEdge(T u, T v, unsigned int capacity);
 
-    std::vector<Edge<T>> getPath(T source, T target, EdgeMap<T> &forwardFlow, EdgeMap<T> &backwardFlow);
+    std::vector<Edge<T>> getPath(T source, T target);
 
-    void augment(EdgeMap<T> &flow, std::vector<Edge<T>> path, EdgeMap<T> &forwardFlow, EdgeMap<T> &backwardFlow);
+    void augment(EdgeMap<T> &flow, std::vector<Edge<T>> path);
 
     EdgeMap<T> maxFlow(const T &source, const T &target);
+
+    std::unordered_map<T, bool> minCut(T source);
 
 };
 
