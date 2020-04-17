@@ -1,27 +1,40 @@
-#include <iostream>
 #include <fstream>
-#include <string>
+#include <sstream>
 #include "Utils.h"
 
-std::vector<std::pair<int, int>> readEdgeList(const std::string &path) {
-    std::ifstream csv_file(path);
-    if (not csv_file) {
-        throw std::runtime_error("Error while opening CSV");
+using namespace std;
+
+tuple<Graph<int>, int, int> readFlowGraph(const string &path) {
+    ifstream input(path);
+    Graph<int> graph;
+    int numEdges, source, target;
+    input >> numEdges >> source >> target;
+    int u, v;
+    unsigned int capacity = 0;
+    for (int i = 0; i < numEdges; i++) {
+        input >> u >> v >> capacity;
+        graph.addEdge(u, v, capacity);
     }
-    std::vector<std::pair<int, int>> edgeList;
-    std::string row, first, second;
-    while (getline(csv_file, row)) {
-        auto ind = row.find(',');
-        if (ind == -1) {
-            throw std::runtime_error("Invalid edge list: missing ','");
+    return {graph, source, target};
+}
+
+tuple<Graph<int>, int, int, int> readBipartiteGraph(const string &path) {
+    ifstream input(path);
+    Graph<int> graph;
+    int numEdges, numVertA, numVertB{};
+    input >> numEdges >> numVertA >> numVertB;
+    int u, v;
+    int source = 0, target = numVertA + numVertB + 1;
+    for (int i = 0; i < numEdges; i++) {
+        input >> u >> v;
+        if (u < 1 or u > numVertA or v < 1 or v > numVertB) {
+            stringstream msg("Invalid edge ");
+            msg << u << " " << v;
+            throw runtime_error(msg.str());
         }
-        first = std::string(row.begin(), row.begin() + ind);
-        second = std::string(row.begin() + ind + 1, row.end());
-        try {
-            edgeList.emplace_back(std::stoi(first), std::stoi(second));
-        } catch (std::invalid_argument &invalid_argument) {
-            throw std::runtime_error("Invalid number in " + row);
-        }
+        graph.addEdge(source, u, 1);
+        graph.addEdge(u, numVertA + v, 1);
+        graph.addEdge(numVertA + v, target, 1);
     }
-    return edgeList;
+    return {graph, source, target, numVertA};
 }

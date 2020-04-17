@@ -1,77 +1,94 @@
 #include <iostream>
-#include <fstream>
 #include <sstream>
-#include <string>
 #include "Graph.h"
-#include "BipartiteMatching.h"
+#include "Stopwatch.hpp"
+#include "Utils.h"
 
-void findMaxFlow(const std::string &path) {
-    std::ifstream input(path);
-    Graph<int> graph;
-    int E{}, source{}, target{};
-    input >> E >> source >> target;
-    int u{}, v{}, capacity{};
-    for (int i = 0; i < E; i++) {
-        input >> u >> v >> capacity;
-        graph.addEdge(u, v, capacity);
-    }
+using namespace std;
+
+template<typename T>
+void maxFlow(Graph<T> graph, T source, T target) {
+    Stopwatch<> stopwatch;
     auto flow = graph.maxFlow(source, target);
+    auto fordFulkersonTime = stopwatch.stop();
+
     unsigned int flowVal = 0;
     for (const auto &item : flow) {
-        std::cout << "(" << item.first.u << ", " << item.first.v << ") = " << item.second << std::endl;
+        cout << "(" << item.first.u << ", " << item.first.v << ") = " << item.second << endl;
         if (item.first.u == source)
             flowVal += item.second;
     }
 
     if (checkFlow(flow, graph.getEdgeCapacities())) {
-        std::cout << "Flow value: " << flowVal << std::endl;
+        cout << "Flow value: " << flowVal << endl << "Time: " << fordFulkersonTime << "μs." << endl;
     } else {
-        std::cout << "Invalid flow" << std::endl;
+        cout << "Invalid flow" << endl;
     }
 }
 
-int main(int argc, char *argv[]) {
-    std::stringstream help;
-    help << "Usage:" << std::endl
-         << "ford_fulkerson [maxflow|maxmatch] DATASET_PATH [DATASET_PATH...]" << std::endl
-         << std::endl
-         << "maxflow - \t For each graph, find the maximum flow from source to sink and print the flow in each edge to stdout" << std::endl
-         << "maxmatch -\t For each bipartite graph, find the maximum matching and print the matching to stdout" << std::endl
-         << std::endl
-         << "DATASET_PATH" << std::endl
-         << "\tFor maxflow:\tThe DATASET_PATH should be a path (no spaces) to a file containing details of the directed graph."
-         << std::endl
-         << "\t\t\tThe first line of the file should have: numberOfEdges sourceVert sinkVert"
-         << std::endl
+template<typename T>
+void maxBipartiteMatching(Graph<T> graph, T source, T target, unsigned int numVertA) {
+    Stopwatch<> stopwatch;
+    auto flow = graph.maxFlow(source, target);
+    auto fordFulkersonTime = stopwatch.stop();
+    unsigned int flowVal = 0;
+    cout << "(A -> B)" << endl;
+    for (const auto &item : flow) {
+        if (item.first.u != source and item.first.v != target and item.second > 0) {
+            cout << "(" << item.first.u << " -> " << (item.first.v - numVertA) << ")" << endl;
+        }
+        if (item.first.u == source)
+            flowVal += item.second;
+    }
+
+    if (checkFlow(flow, graph.getEdgeCapacities())) {
+        cout << "Matchings: " << flowVal << endl << "Time: " << fordFulkersonTime << "μs." << endl;
+    } else {
+        cout << "Invalid flow" << endl;
+    }
+}
+
+int main(int argc, char* argv[]) {
+    stringstream help;
+    help << "Usage:" << endl
+         << "ford_fulkerson [maxflow|maxmatch] DATASET_PATH [DATASET_PATH...]" << endl
+         << endl
+         << "maxflow -\tFor each graph, find the maximum flow from source to sink and print the flow in each edge to stdout"
+         << endl
+         << "maxmatch -\tFor each bipartite graph, find the maximum matching and print the matching to stdout"
+         << endl << endl
+         << "DATASET_PATH -\tShould be a path (no spaces) to a file containing details of the directed graph." << endl
+         << "\tFor maxflow:" << endl
+         << "\t\t\tThe first line of the file should have: numberOfEdges sourceVert sinkVert" << endl
          << "\t\t\tThe following numberOfEdges lines should have the edges from A to B in the form: fromVert toVert"
-         << std::endl
-         << "\t\t\twhere 0 <= fromVert <= V and 0 <= toVert <= V, where V is the total number of vertices in the graph"
-         << std::endl
-         << std::endl
-         << "\tFor maxmatch:\tThe DATASET_PATH should be a path (no spaces) to a file containing details of the bipartite graph."
-         << std::endl
+         << endl << endl
+         << "\tFor maxmatch:" << endl
          << "\t\t\tThe first line of the file should have: numberOfEdges numberOfVerticesInA numberOfVerticesInB"
-         << std::endl
+         << endl
          << "\t\t\tThe following numberOfEdges lines should have the edges from A to B in the form: vertInA vertInB"
-         << std::endl
+         << endl
          << "\t\t\twhere 1 <= vertInA <= numberOfVerticesInA and 1 <= vertInB <= numberOfVerticesInB"
-         << std::endl;
-         
-    if (argc < 2) {
-        std::cout << help.str();
+         << endl;
+
+    if (argc < 3) {
+        cout << help.str();
         return 0;
     }
-    std::string op = argv[1];
+    string op = argv[1];
     if (op != "maxmatch" && op != "maxflow") {
-        std::cerr << help.str();
+        cerr << help.str();
         return -1;
     }
     for (int i = 2; i < argc; ++i) {
+        std::cout << "Processing " << argv[i] << std::endl;
         if (op == "maxflow") {
-            findMaxFlow(argv[i]);
+            auto[graph, source, target] = readFlowGraph(argv[i]);
+            maxFlow(graph, source, target);
         } else if (op == "maxmatch") {
-            maxBipartiteMatching(argv[i]);
+            auto[graph, source, target, numVertA] = readBipartiteGraph(argv[i]);
+            maxBipartiteMatching(graph, source, target, numVertA);
         }
+        std::cout << std::endl;
     }
 }
 
