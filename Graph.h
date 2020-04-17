@@ -15,6 +15,10 @@ struct Edge {
     bool operator==(const Edge &rhs) const {
         return u == rhs.u && v == rhs.v;
     }
+
+    Edge<T> reverse() const {
+        return {v, u};
+    }
 };
 
 template<typename T>
@@ -37,6 +41,8 @@ class Graph {
     AdjLst<T> adjLst;
     AdjLst<T> backAdjLst;
     EdgeMap<T> edgeCapacities;
+    EdgeMap<T> flow;
+
 public:
 
     Graph();
@@ -51,9 +57,9 @@ public:
 
     void addEdge(T u, T v, unsigned int capacity);
 
-    std::vector<Edge<T>> getPath(T source, T target, EdgeMap<T> &forwardFlow, EdgeMap<T> &backwardFlow);
+    std::vector<Edge<T>> getPath(T source, T target);
 
-    void augment(EdgeMap<T> &flow, std::vector<Edge<T>> path, EdgeMap<T> &forwardFlow, EdgeMap<T> &backwardFlow);
+    void augment(std::vector<Edge<T>> path);
 
     EdgeMap<T> maxFlow(const T &source, const T &target);
 
