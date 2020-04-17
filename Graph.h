@@ -59,6 +59,7 @@ public:
 
     EdgeMap<T> maxFlow(const T &source, const T &target);
 
+    std::pair<std::unordered_set<T>, std::unordered_set<T>> minCut(const T &source, const T &target);
 };
 
 template<typename T>

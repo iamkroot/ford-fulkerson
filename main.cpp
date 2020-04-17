@@ -27,6 +27,22 @@ void maxFlow(Graph<T> graph, T source, T target) {
 }
 
 template<typename T>
+void minCut(Graph<T> graph, T source, T target) {
+    Stopwatch<> stopwatch;
+    auto[A, B] = graph.minCut(source, target);
+    auto minCutTime = stopwatch.stop();
+    cout << "First partition:";
+    for (const auto &v : A) {
+        cout << " " << v;
+    }
+    cout << endl << "Second partition:";
+    for (const auto &v : B) {
+        cout << " " << v;
+    }
+    cout << endl << "Time: " << minCutTime << "μs." << endl;
+}
+
+template<typename T>
 void maxBipartiteMatching(Graph<T> graph, T source, T target, unsigned int numVertA) {
     Stopwatch<> stopwatch;
     auto flow = graph.maxFlow(source, target);
@@ -55,12 +71,15 @@ int main(int argc, char* argv[]) {
          << endl
          << "maxflow -\tFor each graph, find the maximum flow from source to sink and print the flow in each edge to stdout"
          << endl
+         << "mincut -\tFor each graph, find a partition of its vertices which minimizes total weight of edges between them "
+         << "and print the two sets to stdout"
+         << endl
          << "maxmatch -\tFor each bipartite graph, find the maximum matching and print the matching to stdout"
          << endl << endl
          << "DATASET_PATH -\tShould be a path (no spaces) to a file containing details of the directed graph." << endl
-         << "\tFor maxflow:" << endl
+         << "\tFor maxflow or mincut:" << endl
          << "\t\t\tThe first line of the file should have: numberOfEdges sourceVert sinkVert" << endl
-         << "\t\t\tThe following numberOfEdges lines should have the edges from A to B in the form: fromVert toVert"
+         << "\t\t\tThe following numberOfEdges lines should have the edges from A to B in the form: fromVert toVert capacity"
          << endl << endl
          << "\tFor maxmatch:" << endl
          << "\t\t\tThe first line of the file should have: numberOfEdges numberOfVerticesInA numberOfVerticesInB"
@@ -75,20 +94,23 @@ int main(int argc, char* argv[]) {
         return 0;
     }
     string op = argv[1];
-    if (op != "maxmatch" && op != "maxflow") {
+    if (op != "maxmatch" && op != "maxflow" && op != "mincut") {
         cerr << help.str();
         return -1;
     }
     for (int i = 2; i < argc; ++i) {
-        std::cout << "Processing " << argv[i] << std::endl;
+        cout << "Processing " << argv[i] << endl;
         if (op == "maxflow") {
             auto[graph, source, target] = readFlowGraph(argv[i]);
             maxFlow(graph, source, target);
+        } else if (op == "mincut") {
+            auto[graph, source, target] = readFlowGraph(argv[i]);
+            minCut(graph, source, target);
         } else if (op == "maxmatch") {
             auto[graph, source, target, numVertA] = readBipartiteGraph(argv[i]);
             maxBipartiteMatching(graph, source, target, numVertA);
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 }
 

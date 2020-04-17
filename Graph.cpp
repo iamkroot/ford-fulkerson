@@ -107,5 +107,36 @@ const EdgeMap<T> &Graph<T>::getEdgeCapacities() const {
     return edgeCapacities;
 }
 
+template<typename T>
+std::pair<std::unordered_set<T>, std::unordered_set<T>> Graph<T>::minCut(const T &source, const T &target) {
+    std::unordered_set<T> reachable, unreachable;
+    maxFlow(source, target);
+    if (flow.empty())
+        return {};
+    std::queue<T> nodes;
+    nodes.push(source);
+    while (not nodes.empty()) {
+        auto node = nodes.front();
+        nodes.pop();
+        reachable.insert(node);
+        for (const auto &vert : adjLst[node]) {  // forward edges
+            Edge edge = {node, vert};
+            if (edgeCapacities[edge] > flow[edge] and not reachable.contains(vert)) {
+                nodes.push(vert);
+            }
+        }
+        for (const auto &vert : backAdjLst[node]) {  // backward edges
+            if (flow[{vert, node}] > 0 and not reachable.contains(vert)) {
+                nodes.push(vert);
+            }
+        }
+    }
+    for (const auto &item : adjLst) {
+        if (not reachable.contains(item.first))
+            unreachable.insert(item.first);
+    }
+    return {reachable, unreachable};
+}
+
 template
 class Graph<int>;
