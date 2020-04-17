@@ -1,25 +1,6 @@
 #include <iostream>
 #include "Graph.h"
 
-template<typename T>
-bool checkFlow(const EdgeMap<T> &flow, const EdgeMap<T> &capacity) {
-    std::unordered_map<T, unsigned int> out, in;
-    for (const auto &edgeFlow : flow) {
-        if (edgeFlow.second < 0 or edgeFlow.second > capacity.at(edgeFlow.first)) {
-            return false;
-        }
-        out[edgeFlow.first.u] += edgeFlow.second;
-        in[edgeFlow.first.v] += edgeFlow.second;
-    }
-    for (const auto &item : out) {
-        if (not in.contains(item.first))
-            return item.second != 0;
-        if (item.second != in[item.first])
-            return false;
-    }
-    return true;
-}
-
 int main() {
     Graph<int> graph;
     graph.addEdge(0, 1, 10);

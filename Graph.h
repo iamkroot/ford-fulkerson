@@ -47,10 +47,6 @@ public:
 
     Graph();
 
-    [[nodiscard]] int getNumEdges() const;
-
-    [[nodiscard]] int getNumVertices() const;
-
     const EdgeMap<T> &getEdgeCapacities() const;
 
     void addVertex(T v);
@@ -64,5 +60,24 @@ public:
     EdgeMap<T> maxFlow(const T &source, const T &target);
 
 };
+
+template<typename T>
+bool checkFlow(const EdgeMap<T> &flow, const EdgeMap<T> &edgeCapacities) {
+    std::unordered_map<T, unsigned int> out, in;
+    for (const auto &edgeFlow : flow) {
+        if (edgeFlow.second < 0 or edgeFlow.second > edgeCapacities.at(edgeFlow.first)) {
+            return false;
+        }
+        out[edgeFlow.first.u] += edgeFlow.second;
+        in[edgeFlow.first.v] += edgeFlow.second;
+    }
+    for (const auto &item : out) {
+        if (not in.contains(item.first))
+            return item.second != 0;
+        if (item.second != in[item.first])
+            return false;
+    }
+    return true;
+}
 
 #endif //GRAPH_H

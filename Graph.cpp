@@ -5,16 +5,6 @@ template<typename T>
 Graph<T>::Graph() = default;
 
 template<typename T>
-int Graph<T>::getNumEdges() const {
-    return numEdges;
-}
-
-template<typename T>
-int Graph<T>::getNumVertices() const {
-    return numVertices;
-}
-
-template<typename T>
 void Graph<T>::addVertex(T v) {
     if (not adjLst.contains(v)) {
         adjLst[v] = {};
