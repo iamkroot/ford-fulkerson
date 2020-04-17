@@ -38,7 +38,6 @@ class Graph {
     AdjLst<T> adjLst;
     AdjLst<T> backAdjLst;
     EdgeMap<T> edgeCapacities;
-    EdgeMap<T> flow;
     EdgeMap<T> forwardFlow, backwardFlow;
 public:
 

@@ -106,6 +106,7 @@ void Graph<T>::augment(EdgeMap<T> &flow, std::vector<Edge<T>> path) {
 template<typename T>
 EdgeMap<T> Graph<T>::maxFlow(const T &source, const T &target) {
     forwardFlow = edgeCapacities;
+    EdgeMap<T> flow;
     auto path = getPath(source, target);
     while (not path.empty()) {
         augment(flow, path);
