@@ -39,24 +39,3 @@ void maxBipartiteMatching(const std::string &path) {
     }
 }
 
-int main(int argc, char* argv[]) {
-    std::stringstream help;
-    help << "Usage:" << std::endl
-         << "bipartite_matching DATASET_PATH [DATASET_PATH...]" << std::endl
-         << std::endl
-         << "The DATASET_PATH should be a path (no spaces) to a file containing details of the bipartite graph."
-         << std::endl
-         << "The first line of the file should have: numberOfEdges numberOfVerticesInA numberOfVerticesInB"
-         << std::endl
-         << "The following numberOfEdges lines should have the edges from A to B in the form: vertInA vertInB"
-         << ", where 1 <= vertInA <= numberOfVerticesInA and 1 <= vertInB <= numberOfVerticesInB"
-         << std::endl;
-    if (argc < 2) {
-        std::cout << help.str();
-        return 0;
-    }
-    for (int i = 1; i < argc; ++i) {
-        maxBipartiteMatching(argv[i]);
-    }
-    return 0;
-}
