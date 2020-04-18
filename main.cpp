@@ -6,6 +6,12 @@
 
 using namespace std;
 
+/**
+ * @brief Find maximum flow from source to target in given graph
+ * @param graph Flow Graph with directed edges
+ * @param source Source Vertex
+ * @param target Target Vertex 
+ */
 template<typename T>
 void maxFlow(Graph<T> graph, T source, T target) {
     Stopwatch<> stopwatch;
@@ -26,6 +32,12 @@ void maxFlow(Graph<T> graph, T source, T target) {
     }
 }
 
+/**
+ * @brief Find minimum st-cut from source to target in given graph
+ * @param graph Flow Graph with directed edges
+ * @param source Source Vertex
+ * @param target Target Vertex 
+ */
 template<typename T>
 void minCut(Graph<T> graph, T source, T target) {
     Stopwatch<> stopwatch;
@@ -42,6 +54,12 @@ void minCut(Graph<T> graph, T source, T target) {
     cout << endl << "Time: " << minCutTime << "μs." << endl;
 }
 
+/**
+ * @brief Find maximum matching from source to target in given graph
+ * @param graph Flow Graph with directed edges
+ * @param source Source Vertex
+ * @param target Target Vertex 
+ */
 template<typename T>
 void maxBipartiteMatching(Graph<T> graph, T source, T target, unsigned int numVertA) {
     Stopwatch<> stopwatch;
