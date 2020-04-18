@@ -4,7 +4,7 @@ Implementation of Ford-Fulkerson algorithm to find Maximum Flow and its applicat
 ## Algorithm 
 * [Ford–Fulkerson Algorithm](https://en.wikipedia.org/wiki/Ford%E2%80%93Fulkerson_algorithm) with runtime *O(Ef)*
 
-where E = number of edges in the given graph, f = maximum flow of the graph
+where *E* = number of edges in the given graph, *f* = maximum flow of the graph
 
 ## Results on Graphs for Maximum Flow Problem
 The datasets for these graphs are available in /datasets/maxflow folder.
@@ -27,8 +27,8 @@ moreno_crime_crime|1380|1476|1124792|451
 opsahl-collaboration|38741|58595|1106549523|12652
 
 ## Issues in Coding
-* Residual graph implementation was difficult
 * Figuring out how to represent Graph as to make it efficient for Ford-Fulkerson was tricky and challenging
+* Residual graph implementation was difficult
 
 ## General Discussion on Ford-Fulkerson Algorithm
 [Maximum Flow](https://en.wikipedia.org/wiki/Maximum_flow_problem) is a very well known problem in the world of Computer Science. Ford-Fulkerson Algorithm is a greedy algorithm that computes this maximum flow in a flow network. The name "Ford–Fulkerson" is often used for the [Edmonds–Karp algorithm](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm), which is a fully defined implementation of the Ford–Fulkerson Algorithm. 
@@ -38,14 +38,14 @@ The idea behind the algorithm is as follows: as long as there is a path from the
 Assuming the capacities to be integers provides a very intuitive view of the problem and the beauty of this algorithm, which suprisingly runs in polynomial time, can be fully appreciated.
 
 ## Time Analysis of Ford-Fulkerson Algorithm
-Let E = number of edges in the given graph, V = number of nodes in the given graph and f = maximum flow of the graph
+Let *E* = number of edges in the given graph, *V* = number of nodes in the given graph and *f* = maximum flow of the graph
 * The while loop runs for at most *f* iterations
 * For each iteration -
-  * As we have used Adjacency-List to represent the Graph, finding a path P using BFS takes O(V+E) time i.e. O(E) 
-  * Agument takes O(V) as it goes over at most V-1 edges
-  * Constructing a new residual graph takes O(E)
+  * As we have used Adjacency-List to represent the Graph, finding a path P using BFS takes *O(V+E)* time i.e. *O(E)* 
+  * Agument takes *O(V)* as it goes over at most *V-1* edges
+  * Constructing a new residual graph takes *O(E)*
   
-Thus, overall time complexity is O(Ef)
+Thus, overall time complexity is *O(Ef)*
 
 ## References
 * [Original Paper by L. R. Ford, Jr. and D. R. Fulkerson](http://www.cs.yale.edu/homes/lans/readings/routing/ford-max_flow-1956.pdf)
