@@ -5,31 +5,44 @@
 #include <unordered_map>
 #include <vector>
 
+template<typename T>
 /**
  * @struct Edge
  * @brief Representation of a directed edge
  */
-template<typename T>
 struct Edge {
     T u{};
     T v{};
 
+    /**
+     * @brief Construct a new Edge object
+     * @param u Source Vertex
+     * @param v Destination Vertex
+     */
     Edge(T u, T v) : u(u), v(v) {}
 
+    /**
+     * @brief == operator overriding
+     * @return True if edge is same else False
+     */
     bool operator==(const Edge &rhs) const {
         return u == rhs.u && v == rhs.v;
     }
 
+    /**
+     * @brief Reverse given Edge
+     * @return Reversed Edge
+     */
     Edge<T> reverse() const {
         return {v, u};
     }
 };
 
+template<typename T>
 /**
  * @struct EdgeHash
  * @brief Hash Generator for Edge
  */
-template<typename T>
 struct EdgeHash {
 
     /**
@@ -45,13 +58,17 @@ template<typename T>
 using AdjLst = std::unordered_map<T, std::unordered_set<T>>;
 
 template<typename T>
+/**
+ * @typedef EdgeMap
+ * @brief testst
+ */
 using EdgeMap = std::unordered_map<Edge<T>, unsigned int, EdgeHash<T>>;
 
+template<typename T>
 /**
  * @class Graph
- * @brief Get the maxFlow and minCut by repeatedly finding augmenting paths through the residual graphs
+ * @brief Representation of a weighted directed graph as using AdjLst and EdgeMap
  */
-template<typename T>
 class Graph {
     int numEdges{0};
     int numVertices{0};
@@ -68,7 +85,7 @@ public:
 
     /**
      * @brief Get edge capacities of the graph
-     * @return Edge capacities
+     * @return An EdgeMap containing Edge capacities of the graph
      */
     const EdgeMap<T> &getEdgeCapacities() const;
 
