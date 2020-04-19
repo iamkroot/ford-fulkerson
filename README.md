@@ -55,7 +55,6 @@ Thus, overall time complexity is *O(VE<sup>2</sup>)*
 For compiling the project, [cmake](cmake.org) is required.
 
 After installing cmake, you can create a folder where you want to compile the project (In this case, we have created a 'build' folder).
-> mkdir build
 > cd build
 
 Run cmake by passing the 'ford-fulkerson' folder path as an argument
