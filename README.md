@@ -1,8 +1,8 @@
-# Ford-Fulkerson Algorithm for Maximum Flow
-Implementation of Ford-Fulkerson algorithm to find Maximum Flow and its application in Minimum Cut and Bipartite Graph Matching problems
+# Ford-Fulkerson Method for Maximum Flow
+Implementation of Ford-Fulkerson method to find Maximum Flow and its application in Minimum Cut and Bipartite Graph Matching problems using Edmonds-Karp Algorithm.
 
 ## Algorithm 
-* [Ford–Fulkerson Algorithm](https://en.wikipedia.org/wiki/Ford%E2%80%93Fulkerson_algorithm) with runtime *O(VE<sup>2</sup>)*
+* [Edmonds-Karp Algorithm](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm) with runtime *O(VE<sup>2</sup>)*
 
 where *V* = number of nodes in the given graph, *E* = number of edges in the given graph
 
@@ -30,14 +30,14 @@ opsahl-collaboration|38741|58595|1106549523|12652
 * Figuring out how to represent Graph as to make it efficient for Ford-Fulkerson was tricky and challenging
 * Residual graph implementation was difficult
 
-## General Discussion on Ford-Fulkerson Algorithm
+## General Discussion on Ford-Fulkerson method
 [Maximum Flow](https://en.wikipedia.org/wiki/Maximum_flow_problem) is a very well known problem in the world of Computer Science. Ford-Fulkerson Algorithm is a greedy algorithm that computes this maximum flow in a flow network. The name "Ford–Fulkerson" is often used for the [Edmonds–Karp algorithm](https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm), which is a fully defined implementation of the Ford–Fulkerson Algorithm using Breadth-First-Search (BFS) to find the augmented path. 
 
 The idea behind the algorithm is as follows: as long as there is a path from the source (start node) to the sink (end node), with available capacity on all edges in the path, we send flow along one of the paths. Then we find another path, and so on. A path with available capacity is called an augmenting path. 
 
 Assuming the capacities to be integers provides a very intuitive view of the problem and the beauty of this algorithm, which suprisingly runs in polynomial time, can be fully appreciated.
 
-## Time Analysis of Ford-Fulkerson Algorithm
+## Time Analysis of Edmonds-Karp Algorithm
 Let *V* = number of nodes in the given graph, *E* = number of edges in the given graph
 * The algorithm runs for at most *E* iterations, as in each iteration at least one of the *E* edges becomes saturated
 * For each iteration -
@@ -48,6 +48,7 @@ Thus, overall time complexity is *O(VE<sup>2</sup>)*
 
 ## References
 * [Original Paper by L. R. Ford, Jr. and D. R. Fulkerson](http://www.cs.yale.edu/homes/lans/readings/routing/ford-max_flow-1956.pdf)
+* [Paper by Jack Edmonds and Richard Karp](http://www.eecs.umich.edu/%7Epettie/matching/Edmonds-Karp-network-flow.pdf)
 * [Introduction to Algorithms](https://en.wikipedia.org/wiki/Introduction_to_Algorithms) (CLRS) pg. 651–664
 * [Algorithm Design](https://www.cs.princeton.edu/~wayne/kleinberg-tardos/pdf/07NetworkFlowI.pdf)
 
@@ -61,8 +62,7 @@ Run cmake by passing the 'ford-fulkerson' folder path as an argument
 > cmake /path/to/folder
 
 ## Running
-### Main
-The project uses a cmake build system and targets C++ 20. After compilation using cmake, the executable can be run from the terminal:
+The project uses a cmake build system and targets C++ 20. After compilation using cmake, the executable (`ford_fulkerson`) can be run from the terminal (tested only on linux):
 ```
 Usage:
 ford_fulkerson [maxflow|mincut|maxmatch] DATASET_PATH [DATASET_PATH...]
