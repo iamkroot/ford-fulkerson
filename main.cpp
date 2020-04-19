@@ -85,7 +85,7 @@ void maxBipartiteMatching(Graph<T> graph, T source, T target, unsigned int numVe
 int main(int argc, char* argv[]) {
     stringstream help;
     help << "Usage:" << endl
-         << "ford_fulkerson [maxflow|maxmatch] DATASET_PATH [DATASET_PATH...]" << endl
+         << "ford_fulkerson [maxflow|mincut|maxmatch] DATASET_PATH [DATASET_PATH...]" << endl
          << endl
          << "maxflow -\tFor each graph, find the maximum flow from source to sink and print the flow in each edge to stdout"
          << endl

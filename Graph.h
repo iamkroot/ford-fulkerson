@@ -104,7 +104,8 @@ public:
     void addEdge(T u, T v, unsigned int capacity);
 
     /**
-     * @brief Get a path from source to target
+     * @brief Get a path from source to target using BFS
+     * @details Uses BFS to find the shortest path that has available capacity
      * @param source Source Vertex
      * @param target Target Vertex 
      * @return Path from source to target

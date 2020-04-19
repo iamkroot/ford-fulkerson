@@ -9,9 +9,18 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+  $(document).ready(function() { init_search(); });
+/* @license-end */
+</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -25,6 +34,21 @@
    </div>
    <div id="projectbrief">Implementation of Ford-Fulkerson algorithm to find Maximum Flow and its application in Minimum Cut and Bipartite Graph Matching problems</div>
   </td>
+   <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Search" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+</td>
  </tr>
  </tbody>
 </table>
@@ -36,17 +60,23 @@
 var searchBox = new SearchBox("searchBox", "search",false,'Search');
 /* @license-end */
 </script>
-<script type="text/javascript" src="menudata.js"></script>
-<script type="text/javascript" src="menu.js"></script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(function() {
-  initMenu('',true,false,'search.php','Search');
-  $(document).ready(function() { init_search(); });
-});
-/* @license-end */</script>
-<div id="main-nav"></div>
-</div><!-- top -->
+$(document).ready(function(){initNavTree('index.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -70,15 +100,28 @@ $(function() {
 <h1><a class="anchor" id="autotoc_md1"></a>
 Algorithm</h1>
 <ul>
-<li><a href="https://en.wikipedia.org/wiki/Ford%E2%80%93Fulkerson_algorithm">Ford–Fulkerson Algorithm</a> with runtime <em>O(Ef)</em></li>
+<li><a href="https://en.wikipedia.org/wiki/Ford%E2%80%93Fulkerson_algorithm">Ford–Fulkerson Algorithm</a> with runtime <em>O(VE<sup>2</sup>)</em></li>
 </ul>
-<p>where E = number of edges in the given graph, f = maximum flow in the graph</p>
+<p>where <em>V</em> = number of nodes in the given graph, <em>E</em> = number of edges in the given graph</p>
 <h1><a class="anchor" id="autotoc_md2"></a>
-Results on Bipartite Graphs for Matching Problem</h1>
-<p>The datasets for large graphs have been taken from <a href="http://konect.uni-koblenz.de/networks/">this</a> page.</p>
+Results on Graphs for Maximum Flow Problem</h1>
+<p>The datasets for these graphs are available in /datasets/maxflow folder.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">dataset </th><th class="markdownTableHeadNone">num_verts </th><th class="markdownTableHeadNone">num_edges </th><th class="markdownTableHeadNone">time (μs) </th><th class="markdownTableHeadNone">ans  </th></tr>
+<th class="markdownTableHeadNone">dataset </th><th class="markdownTableHeadNone">num_verts </th><th class="markdownTableHeadNone">num_edges </th><th class="markdownTableHeadNone">time (μs) </th><th class="markdownTableHeadNone">max_flow  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">small_graph1 </td><td class="markdownTableBodyNone">6 </td><td class="markdownTableBodyNone">10 </td><td class="markdownTableBodyNone">82 </td><td class="markdownTableBodyNone">23  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">small_graph2 </td><td class="markdownTableBodyNone">8 </td><td class="markdownTableBodyNone">13 </td><td class="markdownTableBodyNone">508 </td><td class="markdownTableBodyNone">26  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">large_graph </td><td class="markdownTableBodyNone">4752 </td><td class="markdownTableBodyNone">34247 </td><td class="markdownTableBodyNone">2758163 </td><td class="markdownTableBodyNone">251  </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Results on Bipartite Graphs for Matching Problem</h1>
+<p>The datasets for these graphs are available in /datasets/bipartite folder. These datasets have been taken from <a href="http://konect.uni-koblenz.de/networks/">this</a> page.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">dataset </th><th class="markdownTableHeadNone">num_verts </th><th class="markdownTableHeadNone">num_edges </th><th class="markdownTableHeadNone">time (μs) </th><th class="markdownTableHeadNone">max_matching  </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">brunson_southern-women </td><td class="markdownTableBodyNone">10 </td><td class="markdownTableBodyNone">14 </td><td class="markdownTableBodyNone">632 </td><td class="markdownTableBodyNone">5  </td></tr>
 <tr class="markdownTableRowEven">
@@ -88,12 +131,50 @@ Results on Bipartite Graphs for Matching Problem</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">opsahl-collaboration </td><td class="markdownTableBodyNone">38741 </td><td class="markdownTableBodyNone">58595 </td><td class="markdownTableBodyNone">1106549523 </td><td class="markdownTableBodyNone">12652  </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md3"></a>
+<h1><a class="anchor" id="autotoc_md4"></a>
+Issues in Coding</h1>
+<ul>
+<li>Figuring out how to represent <a class="el" href="classGraph.html" title="Representation of a weighted directed graph as using AdjLst and EdgeMap.">Graph</a> as to make it efficient for Ford-Fulkerson was tricky and challenging</li>
+<li>Residual graph implementation was difficult</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md5"></a>
+General Discussion on Ford-Fulkerson Algorithm</h1>
+<p><a href="https://en.wikipedia.org/wiki/Maximum_flow_problem">Maximum Flow</a> is a very well known problem in the world of Computer Science. Ford-Fulkerson Algorithm is a greedy algorithm that computes this maximum flow in a flow network. The name "Ford–Fulkerson" is often used for the <a href="https://en.wikipedia.org/wiki/Edmonds%E2%80%93Karp_algorithm">Edmonds–Karp algorithm</a>, which is a fully defined implementation of the Ford–Fulkerson Algorithm using Breadth-First-Search (BFS) to find the augmented path.</p>
+<p>The idea behind the algorithm is as follows: as long as there is a path from the source (start node) to the sink (end node), with available capacity on all edges in the path, we send flow along one of the paths. Then we find another path, and so on. A path with available capacity is called an augmenting path.</p>
+<p>Assuming the capacities to be integers provides a very intuitive view of the problem and the beauty of this algorithm, which suprisingly runs in polynomial time, can be fully appreciated.</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+Time Analysis of Ford-Fulkerson Algorithm</h1>
+<p>Let <em>V</em> = number of nodes in the given graph, <em>E</em> = number of edges in the given graph</p><ul>
+<li>The algorithm runs for at most <em>E</em> iterations, as in each iteration at least one of the <em>E</em> edges becomes saturated</li>
+<li>For each iteration -<ul>
+<li>As we have used Adjacency-List to represent the <a class="el" href="classGraph.html" title="Representation of a weighted directed graph as using AdjLst and EdgeMap.">Graph</a>, finding a path P using BFS takes <em>O(E)</em></li>
+<li>Augment takes <em>O(V)</em> as it goes over at most <em>V-1</em> edges</li>
+</ul>
+</li>
+</ul>
+<p>Thus, overall time complexity is <em>O(VE<sup>2</sup>)</em></p>
+<h1><a class="anchor" id="autotoc_md7"></a>
+References</h1>
+<ul>
+<li><a href="http://www.cs.yale.edu/homes/lans/readings/routing/ford-max_flow-1956.pdf">Original Paper by L. R. Ford, Jr. and D. R. Fulkerson</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Introduction_to_Algorithms">Introduction to Algorithms</a> (CLRS) pg. 651–664</li>
+<li><a href="https://www.cs.princeton.edu/~wayne/kleinberg-tardos/pdf/07NetworkFlowI.pdf">Algorithm Design</a></li>
+</ul>
+<h1><a class="anchor" id="autotoc_md8"></a>
+Compilation</h1>
+<p>For compiling the project, <a href="cmake.org">cmake</a> is required.</p>
+<p>After installing cmake, you can create a folder where you want to compile the project (In this case, we have created a 'build' folder). </p><blockquote class="doxtable">
+<p>mkdir build cd build </p>
+</blockquote>
+<p>Run cmake by passing the 'ford-fulkerson' folder path as an argument </p><blockquote class="doxtable">
+<p>cmake /path/to/folder </p>
+</blockquote>
+<h1><a class="anchor" id="autotoc_md9"></a>
 Running</h1>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 Main</h2>
 <p>The project uses a cmake build system and targets C++ 20. After compilation using cmake, the executable can be run from the terminal: </p><div class="fragment"><div class="line">Usage:</div>
-<div class="line">ford_fulkerson [maxflow|maxmatch] DATASET_PATH [DATASET_PATH...]</div>
+<div class="line">ford_fulkerson [maxflow|mincut|maxmatch] DATASET_PATH [DATASET_PATH...]</div>
 <div class="line"> </div>
 <div class="line">maxflow -       For each graph, find the maximum flow from source to sink and print the flow in each edge to stdout</div>
 <div class="line">mincut -        For each graph, find a partition of its vertices which minimizes total weight of edges between them and print the two sets to stdout</div>
@@ -108,7 +189,7 @@ Main</h2>
 <div class="line">                        The first line of the file should have: numberOfEdges numberOfVerticesInA numberOfVerticesInB</div>
 <div class="line">                        The following numberOfEdges lines should have the edges from A to B in the form: vertInA vertInB</div>
 <div class="line">                        where 1 &lt;= vertInA &lt;= numberOfVerticesInA and 1 &lt;= vertInB &lt;= numberOfVerticesInB</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md11"></a>
 Authors</h1>
 <ol type="1">
 <li>2017A7PS0184H Krut Patel</li>
@@ -118,11 +199,14 @@ Authors</h1>
 </ol>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.17
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
+  </ul>
+</div>
 </body>
 </html>
